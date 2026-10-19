@@ -7,9 +7,9 @@ require("dotenv").config();
 const connectDB = require("../src/config/database");
 const mockUser = {
   name: "Clark Kent",
-  email: "clark@superman.com",
+  email: `test-${Date.now()}@example.com`,
   password: "Krypt()n8",
-  preferences: ["movies", "comics"],
+  preferences: ["movies", "comics", "games"],
 };
 
 let token = "";
