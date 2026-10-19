@@ -1,9 +1,9 @@
-
 const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { fetchNews } = require("./services/newsService");
 require("dotenv").config();
 
 const app = express();
@@ -101,11 +101,9 @@ app.post("/users/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign(
-      { userId: user._id },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     return res.status(200).json({ token });
   } catch (error) {
@@ -145,9 +143,21 @@ app.put("/users/preferences", authenticateToken, async (req, res) => {
   }
 });
 
-// Basic authenticated news endpoint
-app.get("/news", authenticateToken, (req, res) => {
-  return res.status(200).json({ news: [] });
+//  authenticated news endpoint
+
+app.get("/news", authenticateToken, async (req, res) => {
+  try {
+    const category = req.query.category || "technology";
+    const articles = await fetchNews(category);
+
+    return res.status(200).json({ news: articles });
+  } catch (error) {
+    console.error("News API error:", error.message);
+
+    return res.status(502).json({
+      message: "Unable to fetch news at the moment",
+    });
+  }
 });
 
 // Start the server only when this file is run directly
