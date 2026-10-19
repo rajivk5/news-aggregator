@@ -12,4 +12,5 @@ async function fetchNews(category = "technology") {
   return response.articles;
 }
 
+
 module.exports = { fetchNews };
