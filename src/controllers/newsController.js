@@ -1,9 +1,10 @@
+
 const { fetchNews } = require("../services/newsService");
 
-let getNews = async (req, res) => {
+const getNews = async (req, res) => {
     try {
-        const category = req.query.category || "technology";
-        const articles = await fetchNews(category);
+        const preferences = req.user.preferences || [];
+        const articles = await fetchNews(preferences);
 
         return res.status(200).json({ news: articles });
     } catch (error) {
@@ -14,6 +15,5 @@ let getNews = async (req, res) => {
         });
     }
 };
-
 
 module.exports = { getNews };

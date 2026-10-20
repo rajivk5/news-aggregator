@@ -53,6 +53,7 @@ const signUp = async (req, res) => {
 };
 
 // Login
+
 const logIn = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -101,6 +102,7 @@ const logIn = async (req, res) => {
         });
     }
 };
+
 
 // Get preferences
 const getPreferences = (req, res) => {
